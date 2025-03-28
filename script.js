@@ -2,141 +2,197 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Referencias a Elementos del DOM ---
   const startScreen = document.getElementById("start-screen");
   const gameScreen = document.getElementById("game-screen");
+  const optionsScreen = document.getElementById("options-screen"); // Nueva pantalla
+
   const newGameBtn = document.getElementById("new-game-btn");
+  const optionsBtn = document.getElementById("options-btn"); // Botón opciones
+  const backToStartBtn = document.getElementById("back-to-start-btn"); // Botón volver
+  const themeButtons = document.querySelectorAll(
+    ".theme-selector .theme-button"
+  ); // Botones de tema
 
   const characterImage = document.getElementById("character-image");
   const characterNameDisplay = document.getElementById("character-name");
   const dialogueText = document.getElementById("dialogue-text");
   const optionsContainer = document.getElementById("options-container");
 
-  // --- Datos de la Historia (Simple) ---
-  // Usa IDs numéricos para las escenas
+  // --- Función Helper para obtener color CSS variable ---
+  // Útil para actualizar placeholders dinámicamente
+  function getCssVariable(variableName) {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+  }
+
+  // --- Función para generar URL de Placeholder con colores del tema ---
+  function getPlaceholderUrl(width, height, text, themeBgVar, themeTextVar) {
+    // Obtener los colores actuales computados
+    let bgColor = getCssVariable(themeBgVar).substring(1); // Quita '#'
+    let textColor = getCssVariable(themeTextVar).substring(1); // Quita '#'
+
+    // Fallback si los colores no se pueden obtener o son inválidos
+    if (!bgColor || bgColor.length < 3) bgColor = "cccccc";
+    if (!textColor || textColor.length < 3) textColor = "333333";
+
+    return `https://placehold.co/${width}x${height}/${bgColor}/${textColor}?text=${encodeURIComponent(
+      text
+    )}`;
+  }
+
+  // --- Datos de la Historia (Ahora usa función para placeholders) ---
   const story = {
-    // Escena Inicial
     1: {
-      character: {
+      // Usamos variables CSS para los colores del placeholder
+      character: () => ({
         name: "???",
-        image: "https://placehold.co/300x400/ffe0e9/5c3c45?text=Sakura",
-      }, // Imagen placeholder
-      text: "Despiertas bajo un cerezo en flor. Una suave brisa mece las ramas. No recuerdas cómo llegaste aquí.",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Sakura",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "Despiertas bajo un cerezo en flor...",
       options: [
         { text: "Intentar levantarte", nextSceneId: 2 },
         { text: "Observar los alrededores", nextSceneId: 3 },
       ],
     },
-    // Rama 1: Levantarse
     2: {
-      character: {
+      character: () => ({
         name: "Akari",
-        image: "https://placehold.co/300x400/ffb3c6/5c3c45?text=Akari",
-      }, // Imagen placeholder
-      text: "Al intentar ponerte de pie, una chica con un kimono rosa se acerca corriendo. '¡Oh! ¡Despertaste! ¿Te encuentras bien?'",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Akari",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "Al intentar ponerte de pie, una chica...",
       options: [
         { text: "'Sí, gracias. ¿Quién eres?'", nextSceneId: 4 },
         { text: "'Me duele un poco la cabeza...'", nextSceneId: 5 },
       ],
     },
-    // Rama 2: Observar
     3: {
-      character: null, // Sin personaje visible aún
-      text: "Miras a tu alrededor. Es un jardín hermoso, lleno de cerezos. Ves un pequeño sendero a lo lejos y escuchas el sonido de agua corriendo.",
+      character: null,
+      text: "Miras a tu alrededor. Es un jardín hermoso...",
       options: [
         { text: "Seguir el sendero", nextSceneId: 6 },
         { text: "Quedarte bajo el árbol", nextSceneId: 7 },
       ],
     },
-    // Continuación Rama 1
     4: {
-      // Preguntas quién es
-      character: {
+      character: () => ({
         name: "Akari",
-        image: "https://placehold.co/300x400/ffb3c6/5c3c45?text=Akari",
-      },
-      text: "'Me llamo Akari. Este es el Jardín de los Sueños Efímeros. Te encontré aquí... parecías perdido.' Te ofrece una cálida sonrisa.",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Akari :)",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "'Me llamo Akari. Este es el Jardín...",
       options: [
-        { text: "Aceptar su ayuda", nextSceneId: 100 }, // FINAL BUENO
-        { text: "Desconfiar y alejarte", nextSceneId: 101 }, // FINAL NEUTRO
+        { text: "Aceptar su ayuda", nextSceneId: 100 },
+        { text: "Desconfiar y alejarte", nextSceneId: 101 },
       ],
     },
     5: {
-      // Dices que te duele la cabeza
-      character: {
+      character: () => ({
         name: "Akari",
-        image: "https://placehold.co/300x400/ff8fab/5c3c45?text=Akari?",
-      }, // Imagen placeholder (expresión diferente?)
-      text: "'Oh, no... Quizás te golpeaste al caer. Deberías descansar.' Su mirada parece un poco preocupada, quizás demasiado.",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Akari :(",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "'Oh, no... Quizás te golpeaste al caer...",
       options: [
-        { text: "Confiar y descansar donde dice", nextSceneId: 102 }, // FINAL MALO
-        { text: "Decir que prefieres caminar un poco", nextSceneId: 101 }, // FINAL NEUTRO
+        { text: "Confiar y descansar donde dice", nextSceneId: 102 },
+        { text: "Decir que prefieres caminar un poco", nextSceneId: 101 },
       ],
     },
-    // Continuación Rama 2
     6: {
-      // Sigues el sendero
       character: null,
-      text: "El sendero te lleva a un pequeño arroyo cristalino. El sonido es relajante. Ves un puente de madera cruzándolo.",
+      text: "El sendero te lleva a un pequeño arroyo...",
       options: [
         { text: "Cruzar el puente", nextSceneId: 8 },
         { text: "Beber agua del arroyo", nextSceneId: 9 },
       ],
     },
     7: {
-      // Te quedas bajo el árbol
       character: null,
-      text: "Decides quedarte bajo el árbol. La paz es agradable, pero sientes que algo no está bien. El tiempo parece detenerse.",
+      text: "Decides quedarte bajo el árbol...",
       options: [
-        { text: "Cerrar los ojos y descansar", nextSceneId: 102 }, // FINAL MALO
-        { text: "Forzarte a levantarte de nuevo", nextSceneId: 2 }, // Vuelve a la otra rama
+        { text: "Cerrar los ojos y descansar", nextSceneId: 102 },
+        { text: "Forzarte a levantarte de nuevo", nextSceneId: 2 },
       ],
     },
-    // Continuación Rama 2.1
     8: {
-      // Cruzas el puente
-      character: {
+      character: () => ({
         name: "Anciano",
-        image: "https://placehold.co/300x400/e0e0e0/5c3c45?text=Anciano",
-      }, // Imagen placeholder
-      text: "Al otro lado del puente, un anciano te mira con sabiduría. 'Bienvenido al corazón del jardín, viajero perdido. ¿Buscas respuestas?'",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Anciano",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "Al otro lado del puente, un anciano te mira...",
       options: [
-        { text: "Preguntar dónde estás", nextSceneId: 100 }, // FINAL BUENO
-        { text: "Preguntar cómo salir", nextSceneId: 101 }, // FINAL NEUTRO
+        { text: "Preguntar dónde estás", nextSceneId: 100 },
+        { text: "Preguntar cómo salir", nextSceneId: 101 },
       ],
     },
     9: {
-      // Bebes agua
       character: null,
-      text: "El agua es fresca y deliciosa. Sin embargo, sientes cómo tus párpados pesan y una somnolencia profunda te invade.",
+      text: "El agua es fresca y deliciosa...",
       options: [
-        { text: "Luchar contra el sueño", nextSceneId: 101 }, // FINAL NEUTRO
-        { text: "Dejarse llevar...", nextSceneId: 102 }, // FINAL MALO
+        { text: "Luchar contra el sueño", nextSceneId: 101 },
+        { text: "Dejarse llevar...", nextSceneId: 102 },
       ],
     },
-
-    // --- Finales ---
+    // Finales
     100: {
-      // FINAL BUENO
-      character: {
+      character: () => ({
         name: "Jardín",
-        image: "https://placehold.co/300x400/ffe0e9/5c3c45?text=Paz",
-      },
-      text: "Ya sea con Akari o el Anciano, encuentras guía. Comprendes que este jardín es un reflejo de tu paz interior. Te sientes renovado y, al cerrar los ojos, despiertas suavemente en tu cama. FIN (Bueno)",
-      options: null, // Indica final
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Paz",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "Ya sea con Akari o el Anciano, encuentras guía...",
+      options: null,
       ending: "Bueno",
     },
     101: {
-      // FINAL NEUTRO
       character: null,
-      text: "Dudas, te alejas, o luchas por mantener el control. El jardín se desvanece lentamente, dejándote con más preguntas que respuestas. Despiertas sintiéndote confundido, como si hubieras olvidado un sueño importante. FIN (Neutro)",
+      text: "Dudas, te alejas, o luchas...",
       options: null,
       ending: "Neutro",
     },
     102: {
-      // FINAL MALO
-      character: {
+      character: () => ({
         name: "???",
-        image: "https://placehold.co/300x400/5c3c45/ffe0e9?text=Oscuridad",
-      },
-      text: "Confías ciegamente, te rindes al descanso o bebes sin pensar. La somnolencia te vence. El hermoso jardín se torna oscuro y silencioso. Te has perdido en el sueño... quizás para siempre. FIN (Malo)",
+        image: getPlaceholderUrl(
+          300,
+          400,
+          "Oscuridad",
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      }),
+      text: "Confías ciegamente, te rindes al descanso...",
       options: null,
       ending: "Malo",
     },
@@ -144,76 +200,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentSceneId = null;
 
+  // --- Funciones de Navegación entre Pantallas ---
+
+  function showScreen(screenToShow) {
+    // Ocultar todas las pantallas
+    startScreen.classList.remove("active");
+    gameScreen.classList.remove("active");
+    optionsScreen.classList.remove("active");
+    // Ocultar layout de juego específicamente si se oculta gameScreen
+    if (screenToShow !== gameScreen) {
+      gameScreen.querySelector(".game-layout").style.display = "none";
+    }
+    // Mostrar la pantalla deseada
+    screenToShow.classList.add("active");
+    // Asegurar visibilidad del layout si es la pantalla de juego
+    if (screenToShow === gameScreen) {
+      gameScreen.querySelector(".game-layout").style.display = "flex"; // O 'row'/'column' si es necesario anular inline style
+    }
+  }
+
   // --- Funciones del Juego ---
 
   function startGame() {
-    startScreen.classList.remove("active");
-    gameScreen.classList.add("active");
-    // Asegura que el layout principal sea visible y flex
-    gameScreen.style.display = "flex";
-    gameScreen.querySelector(".game-layout").style.display = "flex";
-
-    currentSceneId = 1; // Empezar en la escena 1
+    showScreen(gameScreen); // Usa la función helper
+    currentSceneId = 1;
     displayScene(currentSceneId);
   }
 
   function displayScene(sceneId) {
-    const scene = story[sceneId];
-    if (!scene) {
+    const sceneData = story[sceneId];
+    if (!sceneData) {
       console.error(`Escena con ID ${sceneId} no encontrada!`);
       return;
     }
 
-    // Actualizar Imagen y Nombre del Personaje
-    if (scene.character) {
-      characterImage.src = scene.character.image;
-      characterImage.alt = scene.character.name;
-      characterNameDisplay.textContent = scene.character.name;
-      characterImage.style.display = "block"; // Muestra la imagen
-      characterNameDisplay.style.display = "inline-block"; // Muestra el nombre
+    // Obtener datos del personaje (ahora es una función)
+    const characterData =
+      typeof sceneData.character === "function"
+        ? sceneData.character()
+        : sceneData.character;
+
+    // Actualizar Imagen y Nombre
+    if (characterData) {
+      characterImage.src = characterData.image;
+      characterImage.alt = characterData.name;
+      characterNameDisplay.textContent = characterData.name;
+      characterImage.style.display = "block";
+      characterNameDisplay.style.display = "inline-block";
     } else {
-      characterImage.src = ""; // Limpia imagen
+      characterImage.src = "";
       characterImage.alt = "";
       characterNameDisplay.textContent = "";
-      // characterImage.style.display = 'none'; // Oculta si no hay personaje
-      characterNameDisplay.style.display = "none"; // Oculta nombre
+      characterNameDisplay.style.display = "none";
     }
 
-    // Actualizar Texto del Diálogo
-    dialogueText.textContent = scene.text;
+    // Actualizar Diálogo
+    dialogueText.textContent = sceneData.text;
 
-    // Limpiar Opciones Anteriores
+    // Limpiar y Añadir Opciones
     optionsContainer.innerHTML = "";
-
-    // Añadir Nuevas Opciones (si existen)
-    if (scene.options) {
-      scene.options.forEach((option) => {
+    if (sceneData.options) {
+      sceneData.options.forEach((option) => {
         const button = document.createElement("button");
         button.textContent = option.text;
-        button.classList.add("option-button"); // Puedes añadir clase si necesitas estilo específico
         button.addEventListener("click", () =>
           handleOptionClick(option.nextSceneId)
         );
         optionsContainer.appendChild(button);
       });
     } else {
-      // Es una escena final
+      // Escena final
       const endMessage = document.createElement("p");
-      endMessage.textContent = `--- Fin de la Aventura (Resultado: ${scene.ending}) ---`;
+      endMessage.textContent = `--- Fin (Resultado: ${sceneData.ending}) ---`;
       endMessage.style.fontWeight = "bold";
       endMessage.style.marginTop = "2rem";
       endMessage.style.textAlign = "center";
       optionsContainer.appendChild(endMessage);
 
-      // Opcional: Botón para volver a jugar
       const playAgainButton = document.createElement("button");
       playAgainButton.textContent = "Jugar de Nuevo";
       playAgainButton.style.marginTop = "1rem";
-      playAgainButton.addEventListener("click", () => {
-        // La forma más simple de reiniciar es recargar la página
-        window.location.reload();
-        // O podrías llamar a startGame() pero necesitarías resetear estados si el juego fuera más complejo
-      });
+      playAgainButton.addEventListener("click", () => window.location.reload());
       optionsContainer.appendChild(playAgainButton);
     }
   }
@@ -223,6 +290,49 @@ document.addEventListener("DOMContentLoaded", () => {
     displayScene(currentSceneId);
   }
 
+  // --- Funciones de Cambio de Tema ---
+
+  function applyTheme(themeName) {
+    // Si es sakura (default), quitar el atributo
+    if (themeName === "sakura") {
+      document.body.removeAttribute("data-theme");
+    } else {
+      document.body.setAttribute("data-theme", themeName);
+    }
+    // Guardar en localStorage
+    localStorage.setItem("vnTheme", themeName);
+
+    // Opcional: Si el juego está activo, refrescar la escena actual
+    // para actualizar placeholders de imágenes si usan colores del tema
+    if (gameScreen.classList.contains("active") && currentSceneId !== null) {
+      // Re-llama a displayScene para que recalcule la URL del placeholder
+      displayScene(currentSceneId);
+    }
+  }
+
   // --- Event Listeners ---
+
+  // Navegación
   newGameBtn.addEventListener("click", startGame);
+  optionsBtn.addEventListener("click", () => showScreen(optionsScreen));
+  backToStartBtn.addEventListener("click", () => showScreen(startScreen));
+
+  // Cambio de Tema
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const theme = button.getAttribute("data-theme");
+      applyTheme(theme);
+    });
+  });
+
+  // --- Inicialización al Cargar la Página ---
+
+  // Aplicar tema guardado (si existe)
+  const savedTheme = localStorage.getItem("vnTheme");
+  if (savedTheme) {
+    applyTheme(savedTheme); // Aplica el tema guardado al inicio
+  }
+
+  // Asegurarse de que solo la pantalla de inicio esté activa al principio
+  showScreen(startScreen);
 }); // Fin del DOMContentLoaded

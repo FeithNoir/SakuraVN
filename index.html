@@ -16,32 +16,51 @@
           <button id="load-game-btn" class="menu-button" disabled>
             Cargar
           </button>
-          <button id="options-btn" class="menu-button" disabled>
-            Opciones
-          </button>
+          <!-- Habilitamos el botón de Opciones -->
+          <button id="options-btn" class="menu-button">Opciones</button>
           <button id="about-btn" class="menu-button" disabled>Acerca de</button>
         </nav>
       </section>
 
-      <!-- Pantalla de Juego -->
+      <!-- Pantalla de Opciones (Nueva) -->
+      <section id="options-screen" class="screen column">
+        <h2 class="title">Opciones</h2>
+        <div class="options-container column">
+          <h3>Cambiar Tema de Color</h3>
+          <div class="theme-selector column">
+            <!-- Usaremos data-theme para identificar el tema -->
+            <button class="theme-button" data-theme="sakura">
+              🌸 Sakura (Default)
+            </button>
+            <button class="theme-button" data-theme="cyan">💧 Cian</button>
+            <button class="theme-button" data-theme="yellow">
+              ☀️ Amarillo
+            </button>
+            <button class="theme-button" data-theme="green">🌿 Verde</button>
+            <button class="theme-button" data-theme="dark">🌙 Oscuro</button>
+          </div>
+        </div>
+        <button
+          id="back-to-start-btn"
+          class="menu-button"
+          style="margin-top: 3rem"
+        >
+          Volver
+        </button>
+      </section>
+
+      <!-- Pantalla de Juego (sin cambios estructurales) -->
       <section id="game-screen" class="screen">
         <div class="game-layout">
-          <!-- Este div cambiará entre row/column -->
           <div id="screen-area" class="game-section column">
             <div id="character-image-container">
               <img id="character-image" src="" alt="Personaje Actual" />
             </div>
-            <div id="character-name" class="character-name-display">
-              <!-- El nombre del personaje irá aquí -->
-            </div>
+            <div id="character-name" class="character-name-display"></div>
           </div>
           <div id="dialogue-area" class="game-section column">
-            <p id="dialogue-text">
-              <!-- El texto del diálogo irá aquí -->
-            </p>
-            <div id="options-container" class="column">
-              <!-- Las opciones irán aquí -->
-            </div>
+            <p id="dialogue-text"></p>
+            <div id="options-container" class="column"></div>
           </div>
         </div>
       </section>

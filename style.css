@@ -1,19 +1,78 @@
 /* --- Configuración Base y Variables --- */
 :root {
-  /* Paleta Sakura Pastel */
-  --bg-light: #fdf0f5; /* Rosa muy pálido (fondo principal) */
-  --bg-medium: #ffe0e9; /* Rosa pálido */
-  --accent-primary: #ffb3c6; /* Rosa medio */
-  --accent-secondary: #ff8fab; /* Rosa más vibrante (bordes/énfasis) */
-  --text-dark: #5c3c45; /* Marrón/Rosa oscuro para texto */
-  --text-light: #ffffff; /* Blanco */
-  --border-radius-soft: 1.5rem; /* 15px */
-  --border-radius-medium: 0.8rem; /* 8px */
+  /* Paleta Sakura Pastel (Default) */
+  --bg-light: #fdf0f5;
+  --bg-medium: #ffe0e9;
+  --accent-primary: #ffb3c6;
+  --accent-secondary: #ff8fab;
+  --text-dark: #5c3c45;
+  --text-light: #ffffff;
+  --border-radius-soft: 1.5rem;
+  --border-radius-medium: 0.8rem;
+  --text-button: var(--text-dark); /* Texto para botones principales */
+  --image-placeholder-bg: var(
+    --bg-medium
+  ); /* Fondo para imágenes placeholder */
+  --image-placeholder-text: var(
+    --text-dark
+  ); /* Texto para imágenes placeholder */
 }
 
-/* Establece 1rem = 10px */
+/* --- Definición de Temas Alternativos --- */
+
+body[data-theme="cyan"] {
+  --bg-light: #e0f7fa; /* Cian muy pálido */
+  --bg-medium: #b2ebf2; /* Cian pálido */
+  --accent-primary: #4dd0e1; /* Cian medio */
+  --accent-secondary: #00bcd4; /* Cian más vibrante */
+  --text-dark: #006064; /* Cian muy oscuro */
+  --text-light: #ffffff;
+  --text-button: var(--text-dark);
+  --image-placeholder-bg: var(--bg-medium);
+  --image-placeholder-text: var(--text-dark);
+}
+
+body[data-theme="yellow"] {
+  --bg-light: #fffde7; /* Amarillo muy pálido */
+  --bg-medium: #fff9c4; /* Amarillo pálido */
+  --accent-primary: #fff176; /* Amarillo medio */
+  --accent-secondary: #fdd835; /* Amarillo/Dorado */
+  --text-dark: #4e4300; /* Marrón oscuro/Amarillo */
+  --text-light: #ffffff;
+  --text-button: var(--text-dark);
+  --image-placeholder-bg: var(--bg-medium);
+  --image-placeholder-text: var(--text-dark);
+}
+
+body[data-theme="green"] {
+  --bg-light: #e8f5e9; /* Verde muy pálido */
+  --bg-medium: #c8e6c9; /* Verde pálido */
+  --accent-primary: #81c784; /* Verde medio */
+  --accent-secondary: #4caf50; /* Verde estándar */
+  --text-dark: #1b5e20; /* Verde muy oscuro */
+  --text-light: #ffffff;
+  --text-button: var(--text-dark);
+  --image-placeholder-bg: var(--bg-medium);
+  --image-placeholder-text: var(--text-dark);
+}
+
+body[data-theme="dark"] {
+  --bg-light: #424242; /* Gris oscuro */
+  --bg-medium: #303030; /* Gris más oscuro */
+  --accent-primary: #616161; /* Gris medio */
+  --accent-secondary: #757575; /* Gris claro (para acentos) */
+  --text-dark: #eeeeee; /* Texto claro */
+  --text-light: #ffffff; /* Blanco (puede ser igual que text-dark) */
+  --text-button: var(--text-light); /* Texto claro en botones */
+  --image-placeholder-bg: var(--accent-primary); /* Fondo imagen gris */
+  --image-placeholder-text: var(--bg-light); /* Texto imagen gris claro */
+}
+
+/* --- Resto del CSS (Aplicando Variables) --- */
+/* (Asegúrate de que todas las propiedades de color usen las variables) */
+
 html {
-  font-size: 62.5%; /* 10px / 16px = 0.625 = 62.5% */
+  font-size: 62.5%;
   scroll-behavior: smooth;
 }
 
@@ -21,16 +80,16 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* Aplicación de variables */
   background-color: var(--bg-light);
   color: var(--text-dark);
-  font-size: 1.6rem; /* 16px por defecto */
+  font-size: 1.6rem;
   line-height: 1.6;
   min-height: 100vh;
-  display: flex; /* Para centrar el main si es necesario */
+  display: flex;
   justify-content: center;
   align-items: center;
-  /* Opcional: Cursor personalizado
-    cursor: url('path/to/your/default-cursor.png'), auto; */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
 }
 
 * {
@@ -39,25 +98,26 @@ body {
 
 main {
   width: 100%;
-  max-width: 120rem; /* 1200px max width */
+  max-width: 120rem;
   padding: 2rem;
 }
 
-/* --- Clases Utilitarias --- */
+/* --- Clases Utilitarias (sin cambios) --- */
 .row,
 .column {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem; /* Espacio entre elementos flex */
+  gap: 2rem;
 }
-
 .column {
   flex-direction: column;
 }
 
 /* --- Estilos Generales --- */
-h1.title {
+h1.title,
+h2.title {
+  /* Aplicar a ambos h1 y h2 */
   color: var(--accent-secondary);
   font-size: 3.2rem;
   text-align: center;
@@ -69,13 +129,12 @@ button {
   font-size: 1.8rem;
   border: 0.2rem solid var(--accent-secondary);
   background-color: var(--accent-primary);
-  color: var(--text-dark);
+  color: var(--text-button); /* Usar variable para texto de botón */
   border-radius: var(--border-radius-soft);
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease,
+    border-color 0.3s ease;
   font-weight: 600;
-  /* Opcional: Cursor personalizado para elementos clickables
-    cursor: url('path/to/your/pointer-cursor.png'), pointer; */
 }
 
 button:hover:not(:disabled) {
@@ -88,66 +147,96 @@ button:active:not(:disabled) {
 }
 
 button:disabled {
-  background-color: #e0e0e0; /* Gris claro */
-  border-color: #c0c0c0; /* Gris medio */
-  color: #a0a0a0; /* Gris oscuro */
+  /* Usar variables también para disabled si quieres que cambie con el tema,
+     o dejar colores fijos grises */
+  background-color: #e0e0e0;
+  border-color: #c0c0c0;
+  color: #a0a0a0;
   cursor: not-allowed;
+  opacity: 0.7; /* Hacerlo un poco transparente */
 }
 
 /* --- Pantallas --- */
 .screen {
-  display: none; /* Ocultas por defecto */
+  display: none;
   width: 100%;
-  min-height: 80vh; /* Asegura altura mínima */
+  min-height: 80vh;
+  /* Añadir transición para suavizar el cambio de pantalla si se desea */
+  /* transition: opacity 0.5s ease; */
 }
-
 .screen.active {
-  display: flex; /* Muestra la pantalla activa */
-  flex-direction: column; /* Asegura que el contenido interno se apile si no es flex */
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* opacity: 1; */
 }
 
-/* --- Pantalla de Inicio --- */
+/* --- Pantalla de Inicio (sin cambios) --- */
 #start-screen .menu button {
-  min-width: 20rem; /* Ancho mínimo para botones del menú */
-  margin-bottom: 1.5rem; /* Espacio entre botones */
+  min-width: 20rem;
+  margin-bottom: 1.5rem;
   text-align: center;
+}
+
+/* --- Pantalla de Opciones --- */
+#options-screen .options-container {
+  background-color: var(--bg-medium);
+  padding: 3rem;
+  border-radius: var(--border-radius-soft);
+  border: 1px solid var(--accent-primary);
+  width: 100%;
+  max-width: 50rem; /* Limitar ancho */
+  margin-bottom: 2rem;
+}
+#options-screen h3 {
+  color: var(--text-dark);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.theme-selector button {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.theme-selector button:last-child {
+  margin-bottom: 0;
 }
 
 /* --- Pantalla de Juego --- */
 #game-screen {
-  /* Por defecto ya es flex column center por .screen.active y .column */
+  /* No necesita .active aquí ya que se maneja en .screen.active */
 }
 
 .game-layout {
   width: 100%;
-  background-color: var(--bg-medium);
-  border-radius: var(--border-radius-soft);
+  background-color: var(--bg-medium); /* Variable */
+  border-radius: var(--border-radius-soft); /* Variable */
   padding: 2rem;
-  /* Mobile First: Por defecto es columna */
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  border: 1px solid var(--accent-primary); /* Variable */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Suavizar cambio */
 }
 
 .game-section {
-  background-color: var(--bg-light);
-  border-radius: var(--border-radius-medium);
+  background-color: var(--bg-light); /* Variable */
+  border-radius: var(--border-radius-medium); /* Variable */
   padding: 2rem;
-  width: 100%; /* Ocupa todo el ancho en móvil */
-  border: 1px solid var(--accent-primary);
+  width: 100%;
+  border: 1px solid var(--accent-primary); /* Variable */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Suavizar cambio */
 }
 
 #screen-area {
-  /* Contiene imagen y nombre */
-  align-items: center; /* Centra imagen y nombre */
+  align-items: center;
 }
 
 #character-image-container {
   width: 100%;
-  max-width: 30rem; /* Máximo ancho de imagen en móvil */
-  height: auto; /* Altura automática */
+  max-width: 30rem;
+  height: auto;
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
@@ -155,93 +244,91 @@ button:disabled {
 }
 
 #character-image {
-  display: block; /* Evita espacio extra debajo */
+  display: block;
   max-width: 100%;
-  height: auto; /* Mantiene proporción */
-  max-height: 40vh; /* Limita altura para que no sea enorme */
-  border-radius: var(--border-radius-medium);
-  object-fit: contain; /* Asegura que se vea completa sin distorsión */
+  height: auto;
+  max-height: 40vh;
+  border-radius: var(--border-radius-medium); /* Variable */
+  object-fit: contain;
+  /* Fondo sutil por si la imagen no carga o es transparente */
+  background-color: var(--bg-medium); /* Variable */
 }
 
+/* Actualizar placeholder URL en JS para que use las variables */
+/* Ejemplo: https://placehold.co/300x400/[BG_COLOR]/[TEXT_COLOR]?text=... */
+
 .character-name-display {
-  background-color: var(--accent-primary);
-  color: var(--text-dark);
+  background-color: var(--accent-primary); /* Variable */
+  color: var(--text-button); /* Usar var para consistencia */
   padding: 0.5rem 1.5rem;
-  border-radius: var(--border-radius-medium);
+  border-radius: var(--border-radius-medium); /* Variable */
   font-weight: bold;
   text-align: center;
-  min-height: 3rem; /* Para que tenga altura aunque no haya nombre */
-  display: inline-block; /* Para que se ajuste al texto */
+  min-height: 3rem;
+  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Suavizar cambio */
 }
 
 #dialogue-area {
-  /* Contiene texto y opciones */
-  justify-content: space-between; /* Intenta separar texto y opciones */
-  min-height: 25rem; /* Altura mínima para dar espacio */
+  justify-content: space-between;
+  min-height: 25rem;
+  display: flex; /* Asegurar flex aquí */
+  flex-direction: column;
 }
 
 #dialogue-text {
   margin-bottom: 2rem;
   font-size: 1.8rem;
-  flex-grow: 1; /* Permite que el texto ocupe espacio */
+  flex-grow: 1;
+  color: var(--text-dark); /* Variable */
 }
 
 #options-container {
-  width: 100%; /* Ocupa todo el ancho del contenedor */
+  width: 100%;
 }
 
 #options-container button {
-  width: 100%; /* Botones ocupan todo el ancho disponible */
-  margin-bottom: 1rem; /* Espacio entre opciones */
+  /* Estilo para botones de opción del juego */
+  width: 100%;
+  margin-bottom: 1rem;
+  /* Hereda estilo base de button, es suficiente */
 }
 #options-container button:last-child {
   margin-bottom: 0;
 }
 
-/* --- Responsive: Tabletas y Escritorio --- */
+/* --- Responsive (Asegurarse de que las variables se aplican bien) --- */
 @media (min-width: 768px) {
   body {
-    font-size: 1.8rem; /* Aumenta tamaño base en pantallas más grandes */
+    font-size: 1.8rem;
   }
 
-  h1.title {
+  h1.title,
+  h2.title {
     font-size: 4rem;
   }
 
   .game-layout {
-    /* Cambia a fila en pantallas más grandes */
     flex-direction: row;
-    align-items: stretch; /* Estira los hijos para igualar altura */
+    align-items: stretch;
     padding: 3rem;
   }
 
   .game-section {
-    width: 50%; /* Cada sección ocupa la mitad */
+    width: 50%;
     padding: 3rem;
   }
 
   #screen-area {
-    justify-content: center; /* Centra verticalmente la imagen/nombre */
+    justify-content: center;
   }
 
   #character-image-container {
-    max-width: 100%; /* Permite que la imagen crezca más */
-    max-height: 50vh; /* Un poco más alta en desktop */
-  }
-
-  #dialogue-area {
-    justify-content: space-between; /* Texto arriba, botones abajo */
-    display: flex;
-    flex-direction: column;
+    max-width: 100%;
+    max-height: 50vh;
   }
 
   #dialogue-text {
     font-size: 2rem;
-  }
-
-  #options-container button {
-    /* Puedes mantenerlos al 100% o hacerlos más pequeños */
-    /* width: auto;
-         padding: 1.2rem 3rem; */
   }
 }
