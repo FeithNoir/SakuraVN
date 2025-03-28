@@ -1,74 +1,72 @@
 # Sakura VN Prototype 🌸
 
-Un prototipo simple de Novela Visual (VN)/Aventura Gráfica  creada con HTML, CSS y JavaScript puro, con una estética inspirada en los cerezos en flor (sakura) y un enfoque "mobile-first".
+Un prototipo simple de Novela Visual (VN) creada con HTML, CSS y JavaScript puro, con una estética inspirada en los cerezos en flor (sakura) y un enfoque "mobile-first".
 
 Inspirado por las Aventuras Gráficas/Novelas Visuales de la NES, Sakura VN ofrece una experiencia minimalista un poco más enfocada al texto que a la parte gráfica.
 
 ## Descripción
 
-Este proyecto es un punto de partida para crear novelas visuales interactivas directamente en el navegador. Presenta una interfaz limpia con colores pastel, manejo básico de escenas, diálogos y elecciones que llevan a diferentes finales. Está construido sin dependencias externas, utilizando tecnologías web estándar.
+Este proyecto es un punto de partida para crear novelas visuales interactivas directamente en el navegador. Presenta una interfaz limpia con colores pastel, manejo básico de escenas, diálogos y elecciones que llevan a diferentes finales. Está construido sin dependencias externas, utilizando tecnologías web estándar. **La historia se carga desde un archivo `story.json` externo y permite al jugador introducir su nombre al inicio.**
 
 ## ✨ Características Principales
 
 *   **Estética Sakura:** Paleta de colores pastel (rosados, blancos) y elementos de UI con bordes redondeados.
-*   **Responsive Design (Mobile First):** La interfaz se adapta a diferentes tamaños de pantalla, priorizando la experiencia en móviles.
-*   **Pantalla de Inicio:** Menú básico con opción "Nuevo Juego" funcional.
-*   **Pantalla de Juego:** Layout adaptable (columna en móvil, fila en escritorio) que muestra:
-    *   Área de personaje (imagen y nombre).
-    *   Área de diálogo y opciones.
-*   **Lógica de Historia Simple:** Contiene una narrativa corta con múltiples elecciones que conducen a 3 finales distintos (Bueno, Malo, Neutro).
+*   **Temas de Color:** Permite elegir entre varias paletas de colores (Sakura, Cian, Amarillo, Verde, Oscuro) desde el menú de opciones, guardando la preferencia.
+*   **Responsive Design (Mobile First):** La interfaz se adapta a diferentes tamaños de pantalla.
+*   **Pantalla de Inicio:** Menú básico con opción "Nuevo Juego" y "Opciones" funcionales.
+*   **Introducción de Nombre:** Solicita al jugador introducir su nombre antes de comenzar la partida.
+*   **Pantalla de Juego:** Layout adaptable que muestra personaje, nombre, diálogo y opciones.
+*   **Historia Externa:** La narrativa (escenas, diálogos, opciones) se carga desde `story.json`, facilitando su edición.
+*   **Lógica de Historia Simple:** Contiene una narrativa corta con múltiples elecciones que conducen a 3 finales distintos. El nombre del jugador se puede insertar en el diálogo usando `[PLAYER_NAME]`.
 *   **Tecnología Pura:** Desarrollado únicamente con HTML5, CSS3 y Vanilla JavaScript (ES6+).
-*   **Unidades `rem`:** Utiliza `rem` para el dimensionamiento, con `1rem = 10px` establecido en el HTML para facilitar los cálculos.
-*   **Clases Utilitarias CSS:** Incluye clases genéricas como `.row` y `.column` para aplicar estilos Flexbox rápidamente.
+*   **Unidades `rem`:** Utiliza `rem` para el dimensionamiento (`1rem = 10px`).
+*   **Clases Utilitarias CSS:** Incluye `.row` y `.column`.
 
 ## 🚀 Cómo Empezar
 
-1.  **Clona o descarga el repositorio:**
-    ```bash
-    git clone https://github.com/tu-usuario/tu-repositorio.git
-    # O descarga el archivo ZIP
-    ```
-2.  **Navega a la carpeta del proyecto:**
-    ```bash
-    cd vn-sakura-proto
-    ```
-3.  **Abre el archivo `index.html` en tu navegador web.** ¡Y listo! Puedes empezar a jugar.
+1.  **Clona o descarga el repositorio.**
+2.  **Navega a la carpeta del proyecto.**
+3.  **Inicia un servidor web local:** Debido a que el juego carga `story.json` usando `fetch`, necesitas un servidor local para evitar errores de CORS al abrir `index.html` directamente desde el sistema de archivos.
+    *   **Si tienes Python 3:** Abre una terminal en la carpeta y ejecuta `python -m http.server`
+    *   **Si tienes Node.js:** Puedes instalar `serve` (`npm install -g serve`) y ejecutar `serve` en la carpeta.
+    *   **Usuarios de VS Code:** La extensión "Live Server" es una excelente opción.
+4.  **Abre tu navegador** y ve a la dirección proporcionada por tu servidor local (normalmente `http://localhost:8000` o similar).
+
+*(Nota: El servidor local es solo para desarrollo. Al desplegar en plataformas como GitHub Pages, que sirven archivos estáticos, funcionará directamente sin necesidad de un servidor adicional.)*
 
 ## 🛠️ Especificaciones Técnicas
 
 *   **Frontend:**
     *   HTML5 (Semántico)
-    *   CSS3 (Flexbox, Custom Properties/Variables, Media Queries, `rem` units)
-    *   JavaScript (Vanilla ES6+, Manipulación del DOM, Lógica de escenas simple)
+    *   CSS3 (Flexbox, Custom Properties, Media Queries, `rem`)
+    *   JavaScript (Vanilla ES6+, Manipulación del DOM, `fetch` API para JSON, `localStorage` para tema)
+*   **Datos:**
+    *   `story.json` (Estructura de la historia)
 
 ## 📝 Tareas Pendientes (To-Do)
 
-*   [ ] **Implementar Menú:** Hacer funcionales los botones "Cargar", "Opciones" y "Acerca de".
+*   [ ] **Implementar Menú:** Hacer funcionales "Cargar" y "Acerca de".
 *   [ ] **Sistema de Guardado/Carga:**
-    *   [ ] Guardado local simple (usando `localStorage`).
+    *   [ ] Guardado local (`localStorage` o `IndexedDB`) del progreso (escena actual, nombre, ¿flags?).
     *   [ ] Múltiples ranuras de guardado.
 *   [ ] **Pantalla de Opciones:**
-    *   [ ] Control de volumen (Música, Efectos de Sonido).
+    *   [ ] Control de volumen (Música, SFX).
     *   [ ] Velocidad del texto.
     *   [ ] Opción para saltar texto leído.
 *   [ ] **Mejoras Visuales:**
-    *   [ ] Animaciones/Transiciones CSS sutiles para diálogos, aparición de personajes, etc.
-    *   [ ] Fondos de escena (Backgrounds) variables.
-    *   [ ] Soporte para diferentes expresiones del mismo personaje (cambiar imagen).
-    *   [ ] Cursor personalizado con temática Sakura (si se encuentran/crean los assets).
+    *   [ ] Animaciones/Transiciones CSS.
+    *   [ ] Fondos de escena variables.
+    *   [ ] Soporte para expresiones de personaje.
+    *   [ ] Cursor personalizado.
 *   [ ] **Audio:**
     *   [ ] Música de fondo (BGM).
-    *   [ ] Efectos de sonido (SFX) para clics, elecciones, etc.
+    *   [ ] Efectos de sonido (SFX).
 *   [ ] **Complejidad de la Historia:**
-    *   [ ] Sistema de "flags" o variables para rastrear decisiones pasadas y afectar diálogos/rutas futuras.
-    *   [ ] Estructura de historia más compleja y larga.
+    *   [ ] Sistema de "flags" para decisiones.
 *   [ ] **Mejoras de Código:**
-    *   [ ] Refactorizar JS en módulos o clases para mejor organización.
-    *   [ ] Optimizar rendimiento si la historia crece mucho.
-*   [ ] **Accesibilidad (a11y):**
-    *   [ ] Mejorar navegación por teclado.
-    *   [ ] Asegurar buen contraste de colores.
-    *   [ ] Uso de atributos ARIA donde sea necesario.
+    *   [ ] Refactorizar JS en módulos/clases.
+    *   [ ] Mejor validación de nombre.
+*   [ ] **Accesibilidad (a11y).**
 
 ## 🧑‍💻 Autor
 
@@ -77,4 +75,4 @@ Este proyecto es un punto de partida para crear novelas visuales interactivas di
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles (puedes añadir un archivo LICENSE.md si lo deseas).
+Este proyecto está bajo la Licencia MIT. (Puedes añadir un archivo LICENSE.md).

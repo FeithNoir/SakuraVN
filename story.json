@@ -1,0 +1,92 @@
+{
+    "1": {
+        "character": { "name": "???", "placeholderText": "Sakura" },
+        "text": "Despiertas bajo un cerezo en flor. Una suave brisa mece las ramas. No recuerdas cómo llegaste aquí.",
+        "options": [
+            { "text": "Intentar levantarte", "nextSceneId": "2" },
+            { "text": "Observar los alrededores", "nextSceneId": "3" }
+        ]
+    },
+    "2": {
+        "character": { "name": "Akari", "placeholderText": "Akari" },
+        "text": "Al intentar ponerte de pie, una chica con un kimono rosa se acerca corriendo. '¡Oh! ¡Despertaste! ¿Te encuentras bien?'",
+        "options": [
+            { "text": "'Sí, gracias. ¿Quién eres?'", "nextSceneId": "4" },
+            { "text": "'Me duele un poco la cabeza...'", "nextSceneId": "5" }
+        ]
+    },
+    "3": {
+        "character": null,
+        "text": "Miras a tu alrededor. Es un jardín hermoso, lleno de cerezos. Ves un pequeño sendero a lo lejos y escuchas el sonido de agua corriendo.",
+        "options": [
+            { "text": "Seguir el sendero", "nextSceneId": "6" },
+            { "text": "Quedarte bajo el árbol", "nextSceneId": "7" }
+        ]
+    },
+    "4": {
+        "character": { "name": "Akari", "placeholderText": "Akari :)" },
+        "text": "'Me llamo Akari, [PLAYER_NAME]. Este es el Jardín de los Sueños Efímeros. Te encontré aquí... parecías perdido.' Te ofrece una cálida sonrisa.",
+        "options": [
+            { "text": "Aceptar su ayuda", "nextSceneId": "100" },
+            { "text": "Desconfiar y alejarte", "nextSceneId": "101" }
+        ]
+    },
+    "5": {
+        "character": { "name": "Akari", "placeholderText": "Akari :(" },
+        "text": "'Oh, no... Quizás te golpeaste al caer. Deberías descansar.' Su mirada parece un poco preocupada, quizás demasiado.",
+        "options": [
+            { "text": "Confiar y descansar donde dice", "nextSceneId": "102" },
+            { "text": "Decir que prefieres caminar un poco", "nextSceneId": "101" }
+        ]
+    },
+    "6": {
+        "character": null,
+        "text": "El sendero te lleva a un pequeño arroyo cristalino. El sonido es relajante. Ves un puente de madera cruzándolo.",
+        "options": [
+            { "text": "Cruzar el puente", "nextSceneId": "8" },
+            { "text": "Beber agua del arroyo", "nextSceneId": "9" }
+        ]
+    },
+    "7": {
+        "character": null,
+        "text": "Decides quedarte bajo el árbol. La paz es agradable, pero sientes que algo no está bien. El tiempo parece detenerse.",
+        "options": [
+            { "text": "Cerrar los ojos y descansar", "nextSceneId": "102" },
+            { "text": "Forzarte a levantarte de nuevo", "nextSceneId": "2" }
+        ]
+    },
+    "8": {
+        "character": { "name": "Anciano", "placeholderText": "Anciano" },
+        "text": "Al otro lado del puente, un anciano te mira con sabiduría. 'Bienvenido al corazón del jardín, viajero perdido. ¿Buscas respuestas?'",
+        "options": [
+            { "text": "Preguntar dónde estás", "nextSceneId": "100" },
+            { "text": "Preguntar cómo salir", "nextSceneId": "101" }
+        ]
+    },
+    "9": {
+        "character": null,
+        "text": "El agua es fresca y deliciosa. Sin embargo, sientes cómo tus párpados pesan y una somnolencia profunda te invade.",
+        "options": [
+            { "text": "Luchar contra el sueño", "nextSceneId": "101" },
+            { "text": "Dejarse llevar...", "nextSceneId": "102" }
+        ]
+    },
+    "100": {
+        "character": { "name": "Jardín", "placeholderText": "Paz" },
+        "text": "Ya sea con Akari o el Anciano, encuentras guía. Comprendes que este jardín es un reflejo de tu paz interior. Te sientes renovado y, al cerrar los ojos, despiertas suavemente en tu cama. FIN (Bueno)",
+        "options": null,
+        "ending": "Bueno"
+    },
+    "101": {
+        "character": null,
+        "text": "Dudas, te alejas, o luchas por mantener el control. El jardín se desvanece lentamente, dejándote con más preguntas que respuestas. Despiertas sintiéndote confundido, como si hubieras olvidado un sueño importante. FIN (Neutro)",
+        "options": null,
+        "ending": "Neutro"
+    },
+    "102": {
+        "character": { "name": "???", "placeholderText": "Oscuridad" },
+        "text": "Confías ciegamente, te rindes al descanso o bebes sin pensar. La somnolencia te vence. El hermoso jardín se torna oscuro y silencioso. Te has perdido en el sueño... quizás para siempre. FIN (Malo)",
+        "options": null,
+        "ending": "Malo"
+    }
+}

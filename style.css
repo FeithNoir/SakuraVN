@@ -332,3 +332,49 @@ button:disabled {
     font-size: 2rem;
   }
 }
+
+/* --- Pantalla de Introducción de Nombre --- */
+#name-input-screen .name-input-container {
+  background-color: var(--bg-medium);
+  padding: 3rem;
+  border-radius: var(--border-radius-soft);
+  border: 1px solid var(--accent-primary);
+  width: 100%;
+  max-width: 40rem; /* Ancho adecuado para un input */
+  align-items: stretch; /* Estira el input y botón */
+}
+
+#player-name-input {
+  font-family: inherit; /* Usa la misma fuente */
+  font-size: 1.8rem;
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+  border: 0.2rem solid var(--accent-secondary);
+  border-radius: var(--border-radius-medium);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  width: 100%; /* Ocupa el contenedor */
+  margin-bottom: 0; /* Quita margen si lo hubiera */
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+#player-name-input::placeholder {
+  color: var(--accent-primary); /* Color del placeholder */
+  opacity: 0.8;
+}
+
+#player-name-input:focus {
+  outline: none; /* Quita el outline por defecto */
+  border-color: var(--accent-secondary); /* Podrías intensificar el color */
+  /* Opcional: añadir un ligero brillo o sombra */
+  /* box-shadow: 0 0 0 0.3rem rgba(var(--accent-secondary-rgb, 255, 143, 171), 0.3); */
+  /* Necesitarías definir --accent-secondary-rgb si usas esto */
+}
+
+/* Ajustar botón Volver en pantalla de nombre */
+#back-to-start-from-name-btn {
+  transition: background-color 0.3s ease; /* Añadir transición */
+}
+#back-to-start-from-name-btn:hover {
+  background-color: var(--accent-primary); /* Cambia color al hacer hover */
+}

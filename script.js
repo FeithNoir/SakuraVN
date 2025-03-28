@@ -1,250 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- Referencias a Elementos del DOM ---
   const startScreen = document.getElementById("start-screen");
+  const nameInputScreen = document.getElementById("name-input-screen"); // Nueva pantalla nombre
   const gameScreen = document.getElementById("game-screen");
-  const optionsScreen = document.getElementById("options-screen"); // Nueva pantalla
+  const optionsScreen = document.getElementById("options-screen");
+  const loadingMessage = document.getElementById("loading-message"); // Mensaje cargando
 
   const newGameBtn = document.getElementById("new-game-btn");
-  const optionsBtn = document.getElementById("options-btn"); // Botón opciones
-  const backToStartBtn = document.getElementById("back-to-start-btn"); // Botón volver
+  const optionsBtn = document.getElementById("options-btn");
+  const backToStartBtn = document.getElementById("back-to-start-btn"); // Volver desde opciones
+  const backToStartFromNameBtn = document.getElementById(
+    "back-to-start-from-name-btn"
+  ); // Volver desde nombre
   const themeButtons = document.querySelectorAll(
     ".theme-selector .theme-button"
-  ); // Botones de tema
+  );
+
+  const playerNameInput = document.getElementById("player-name-input"); // Input nombre
+  const confirmNameBtn = document.getElementById("confirm-name-btn"); // Botón confirmar nombre
 
   const characterImage = document.getElementById("character-image");
   const characterNameDisplay = document.getElementById("character-name");
   const dialogueText = document.getElementById("dialogue-text");
   const optionsContainer = document.getElementById("options-container");
 
-  // --- Función Helper para obtener color CSS variable ---
-  // Útil para actualizar placeholders dinámicamente
+  // --- Variables Globales del Juego ---
+  let storyData = null;
+  let currentSceneId = null;
+  let playerName = "Viajero"; // Nombre por defecto
+
+  // --- Funciones Helper ---
   function getCssVariable(variableName) {
     return getComputedStyle(document.documentElement)
       .getPropertyValue(variableName)
       .trim();
   }
 
-  // --- Función para generar URL de Placeholder con colores del tema ---
   function getPlaceholderUrl(width, height, text, themeBgVar, themeTextVar) {
-    // Obtener los colores actuales computados
-    let bgColor = getCssVariable(themeBgVar).substring(1); // Quita '#'
-    let textColor = getCssVariable(themeTextVar).substring(1); // Quita '#'
-
-    // Fallback si los colores no se pueden obtener o son inválidos
-    if (!bgColor || bgColor.length < 3) bgColor = "cccccc";
-    if (!textColor || textColor.length < 3) textColor = "333333";
-
+    let bgColor = getCssVariable(themeBgVar).substring(1) || "cccccc";
+    let textColor = getCssVariable(themeTextVar).substring(1) || "333333";
     return `https://placehold.co/${width}x${height}/${bgColor}/${textColor}?text=${encodeURIComponent(
       text
     )}`;
   }
 
-  // --- Datos de la Historia (Ahora usa función para placeholders) ---
-  const story = {
-    1: {
-      // Usamos variables CSS para los colores del placeholder
-      character: () => ({
-        name: "???",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Sakura",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "Despiertas bajo un cerezo en flor...",
-      options: [
-        { text: "Intentar levantarte", nextSceneId: 2 },
-        { text: "Observar los alrededores", nextSceneId: 3 },
-      ],
-    },
-    2: {
-      character: () => ({
-        name: "Akari",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Akari",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "Al intentar ponerte de pie, una chica...",
-      options: [
-        { text: "'Sí, gracias. ¿Quién eres?'", nextSceneId: 4 },
-        { text: "'Me duele un poco la cabeza...'", nextSceneId: 5 },
-      ],
-    },
-    3: {
-      character: null,
-      text: "Miras a tu alrededor. Es un jardín hermoso...",
-      options: [
-        { text: "Seguir el sendero", nextSceneId: 6 },
-        { text: "Quedarte bajo el árbol", nextSceneId: 7 },
-      ],
-    },
-    4: {
-      character: () => ({
-        name: "Akari",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Akari :)",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "'Me llamo Akari. Este es el Jardín...",
-      options: [
-        { text: "Aceptar su ayuda", nextSceneId: 100 },
-        { text: "Desconfiar y alejarte", nextSceneId: 101 },
-      ],
-    },
-    5: {
-      character: () => ({
-        name: "Akari",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Akari :(",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "'Oh, no... Quizás te golpeaste al caer...",
-      options: [
-        { text: "Confiar y descansar donde dice", nextSceneId: 102 },
-        { text: "Decir que prefieres caminar un poco", nextSceneId: 101 },
-      ],
-    },
-    6: {
-      character: null,
-      text: "El sendero te lleva a un pequeño arroyo...",
-      options: [
-        { text: "Cruzar el puente", nextSceneId: 8 },
-        { text: "Beber agua del arroyo", nextSceneId: 9 },
-      ],
-    },
-    7: {
-      character: null,
-      text: "Decides quedarte bajo el árbol...",
-      options: [
-        { text: "Cerrar los ojos y descansar", nextSceneId: 102 },
-        { text: "Forzarte a levantarte de nuevo", nextSceneId: 2 },
-      ],
-    },
-    8: {
-      character: () => ({
-        name: "Anciano",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Anciano",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "Al otro lado del puente, un anciano te mira...",
-      options: [
-        { text: "Preguntar dónde estás", nextSceneId: 100 },
-        { text: "Preguntar cómo salir", nextSceneId: 101 },
-      ],
-    },
-    9: {
-      character: null,
-      text: "El agua es fresca y deliciosa...",
-      options: [
-        { text: "Luchar contra el sueño", nextSceneId: 101 },
-        { text: "Dejarse llevar...", nextSceneId: 102 },
-      ],
-    },
-    // Finales
-    100: {
-      character: () => ({
-        name: "Jardín",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Paz",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "Ya sea con Akari o el Anciano, encuentras guía...",
-      options: null,
-      ending: "Bueno",
-    },
-    101: {
-      character: null,
-      text: "Dudas, te alejas, o luchas...",
-      options: null,
-      ending: "Neutro",
-    },
-    102: {
-      character: () => ({
-        name: "???",
-        image: getPlaceholderUrl(
-          300,
-          400,
-          "Oscuridad",
-          "--image-placeholder-bg",
-          "--image-placeholder-text"
-        ),
-      }),
-      text: "Confías ciegamente, te rindes al descanso...",
-      options: null,
-      ending: "Malo",
-    },
-  };
-
-  let currentSceneId = null;
-
-  // --- Funciones de Navegación entre Pantallas ---
-
   function showScreen(screenToShow) {
-    // Ocultar todas las pantallas
-    startScreen.classList.remove("active");
-    gameScreen.classList.remove("active");
-    optionsScreen.classList.remove("active");
-    // Ocultar layout de juego específicamente si se oculta gameScreen
+    [startScreen, nameInputScreen, gameScreen, optionsScreen].forEach(
+      (screen) => screen.classList.remove("active")
+    );
     if (screenToShow !== gameScreen) {
       gameScreen.querySelector(".game-layout").style.display = "none";
     }
-    // Mostrar la pantalla deseada
     screenToShow.classList.add("active");
-    // Asegurar visibilidad del layout si es la pantalla de juego
     if (screenToShow === gameScreen) {
-      gameScreen.querySelector(".game-layout").style.display = "flex"; // O 'row'/'column' si es necesario anular inline style
+      gameScreen.querySelector(".game-layout").style.display = "flex";
     }
   }
 
   // --- Funciones del Juego ---
 
+  // Paso 1: Mostrar pantalla para pedir nombre
+  function promptForName() {
+    playerNameInput.value = ""; // Limpiar input por si vuelve
+    showScreen(nameInputScreen);
+    playerNameInput.focus(); // Poner foco en el input
+  }
+
+  // Paso 2: Guardar nombre y empezar juego
+  function saveNameAndStartGame() {
+    const inputName = playerNameInput.value.trim();
+    if (inputName) {
+      playerName = inputName;
+    } else {
+      playerName = "Viajero"; // Usar default si está vacío
+    }
+    console.log("Nombre del jugador:", playerName);
+    startGame();
+  }
+
+  // Paso 3: Iniciar la lógica del juego
   function startGame() {
-    showScreen(gameScreen); // Usa la función helper
-    currentSceneId = 1;
+    if (!storyData) {
+      console.error("Intentando iniciar juego antes de cargar la historia.");
+      return;
+    }
+    showScreen(gameScreen);
+    currentSceneId = "1";
     displayScene(currentSceneId);
   }
 
   function displayScene(sceneId) {
-    const sceneData = story[sceneId];
+    if (!storyData) return;
+
+    const sceneData = storyData[sceneId];
     if (!sceneData) {
-      console.error(`Escena con ID ${sceneId} no encontrada!`);
+      console.error(`Escena con ID "${sceneId}" no encontrada en storyData!`);
       return;
     }
 
-    // Obtener datos del personaje (ahora es una función)
-    const characterData =
-      typeof sceneData.character === "function"
-        ? sceneData.character()
-        : sceneData.character;
-
-    // Actualizar Imagen y Nombre
-    if (characterData) {
-      characterImage.src = characterData.image;
-      characterImage.alt = characterData.name;
-      characterNameDisplay.textContent = characterData.name;
+    // --- Actualizar Personaje ---
+    let characterDisplayData = null;
+    if (sceneData.character) {
+      characterDisplayData = {
+        name: sceneData.character.name,
+        image: getPlaceholderUrl(
+          300,
+          400,
+          sceneData.character.placeholderText || sceneData.character.name,
+          "--image-placeholder-bg",
+          "--image-placeholder-text"
+        ),
+      };
+    }
+    // (código para mostrar imagen y nombre, sin cambios)
+    if (characterDisplayData) {
+      characterImage.src = characterDisplayData.image;
+      characterImage.alt = characterDisplayData.name;
+      characterNameDisplay.textContent = characterDisplayData.name;
       characterImage.style.display = "block";
       characterNameDisplay.style.display = "inline-block";
     } else {
@@ -254,29 +126,37 @@ document.addEventListener("DOMContentLoaded", () => {
       characterNameDisplay.style.display = "none";
     }
 
-    // Actualizar Diálogo
-    dialogueText.textContent = sceneData.text;
+    // --- Actualizar Diálogo (Reemplazando Placeholder) ---
+    let processedText = sceneData.text;
+    // Reemplaza todas las ocurrencias de [PLAYER_NAME] con el nombre guardado
+    processedText = processedText.replace(/\[PLAYER_NAME\]/g, playerName);
+    dialogueText.textContent = processedText;
 
-    // Limpiar y Añadir Opciones
+    // --- Limpiar y Añadir Opciones ---
     optionsContainer.innerHTML = "";
-    if (sceneData.options) {
+    if (sceneData.options && sceneData.options.length > 0) {
       sceneData.options.forEach((option) => {
         const button = document.createElement("button");
-        button.textContent = option.text;
+        // Reemplazar placeholder también en las opciones si fuera necesario
+        button.textContent = option.text.replace(
+          /\[PLAYER_NAME\]/g,
+          playerName
+        );
         button.addEventListener("click", () =>
-          handleOptionClick(option.nextSceneId)
+          handleOptionClick(String(option.nextSceneId))
         );
         optionsContainer.appendChild(button);
       });
     } else {
-      // Escena final
+      // --- Escena Final --- (sin cambios)
       const endMessage = document.createElement("p");
-      endMessage.textContent = `--- Fin (Resultado: ${sceneData.ending}) ---`;
+      endMessage.textContent = `--- Fin (Resultado: ${
+        sceneData.ending || "Desconocido"
+      }) ---`;
       endMessage.style.fontWeight = "bold";
       endMessage.style.marginTop = "2rem";
       endMessage.style.textAlign = "center";
       optionsContainer.appendChild(endMessage);
-
       const playAgainButton = document.createElement("button");
       playAgainButton.textContent = "Jugar de Nuevo";
       playAgainButton.style.marginTop = "1rem";
@@ -291,48 +171,82 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- Funciones de Cambio de Tema ---
-
   function applyTheme(themeName) {
-    // Si es sakura (default), quitar el atributo
     if (themeName === "sakura") {
       document.body.removeAttribute("data-theme");
     } else {
       document.body.setAttribute("data-theme", themeName);
     }
-    // Guardar en localStorage
     localStorage.setItem("vnTheme", themeName);
 
-    // Opcional: Si el juego está activo, refrescar la escena actual
-    // para actualizar placeholders de imágenes si usan colores del tema
     if (gameScreen.classList.contains("active") && currentSceneId !== null) {
-      // Re-llama a displayScene para que recalcule la URL del placeholder
       displayScene(currentSceneId);
     }
   }
 
-  // --- Event Listeners ---
+  // --- Función de Inicialización Principal ---
+  function initializeApp() {
+    console.log("Story loaded successfully!");
+    loadingMessage.style.display = "none"; // Ocultar mensaje "Cargando"
 
-  // Navegación
-  newGameBtn.addEventListener("click", startGame);
-  optionsBtn.addEventListener("click", () => showScreen(optionsScreen));
-  backToStartBtn.addEventListener("click", () => showScreen(startScreen));
+    const savedTheme = localStorage.getItem("vnTheme");
+    applyTheme(savedTheme || "sakura");
 
-  // Cambio de Tema
-  themeButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const theme = button.getAttribute("data-theme");
-      applyTheme(theme);
+    // --- Adjuntar Event Listeners ---
+    // Botón Nuevo Juego ahora lleva a pedir nombre
+    newGameBtn.addEventListener("click", promptForName);
+
+    // Botón Confirmar Nombre ahora guarda y empieza el juego
+    confirmNameBtn.addEventListener("click", saveNameAndStartGame);
+    // Permitir confirmar con Enter en el input
+    playerNameInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        saveNameAndStartGame();
+      }
     });
-  });
 
-  // --- Inicialización al Cargar la Página ---
+    // Botones de navegación
+    optionsBtn.addEventListener("click", () => showScreen(optionsScreen));
+    backToStartBtn.addEventListener("click", () => showScreen(startScreen));
+    backToStartFromNameBtn.addEventListener("click", () =>
+      showScreen(startScreen)
+    ); // Volver desde nombre
 
-  // Aplicar tema guardado (si existe)
-  const savedTheme = localStorage.getItem("vnTheme");
-  if (savedTheme) {
-    applyTheme(savedTheme); // Aplica el tema guardado al inicio
+    // Cambio de tema
+    themeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const theme = button.getAttribute("data-theme");
+        applyTheme(theme);
+      });
+    });
+
+    // Habilitar botones principales
+    newGameBtn.disabled = false;
+    optionsBtn.disabled = false;
+
+    showScreen(startScreen); // Mostrar pantalla inicial
   }
 
-  // Asegurarse de que solo la pantalla de inicio esté activa al principio
-  showScreen(startScreen);
-}); // Fin del DOMContentLoaded
+  // --- Carga Asíncrona del JSON y Arranque ---
+  function loadStoryAndInit() {
+    fetch("story.json")
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        storyData = data;
+        initializeApp();
+      })
+      .catch((error) => {
+        console.error("Error loading story data:", error);
+        loadingMessage.textContent = `Error al cargar historia: ${error.message}`;
+        loadingMessage.style.color = "red";
+        // Mantener botones desactivados si falla la carga
+      });
+  }
+
+  // --- Punto de Entrada ---
+  loadStoryAndInit();
+}); // Fin DOMContentLoaded
