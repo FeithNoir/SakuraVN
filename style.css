@@ -1,0 +1,247 @@
+/* --- Configuración Base y Variables --- */
+:root {
+  /* Paleta Sakura Pastel */
+  --bg-light: #fdf0f5; /* Rosa muy pálido (fondo principal) */
+  --bg-medium: #ffe0e9; /* Rosa pálido */
+  --accent-primary: #ffb3c6; /* Rosa medio */
+  --accent-secondary: #ff8fab; /* Rosa más vibrante (bordes/énfasis) */
+  --text-dark: #5c3c45; /* Marrón/Rosa oscuro para texto */
+  --text-light: #ffffff; /* Blanco */
+  --border-radius-soft: 1.5rem; /* 15px */
+  --border-radius-medium: 0.8rem; /* 8px */
+}
+
+/* Establece 1rem = 10px */
+html {
+  font-size: 62.5%; /* 10px / 16px = 0.625 = 62.5% */
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  font-size: 1.6rem; /* 16px por defecto */
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex; /* Para centrar el main si es necesario */
+  justify-content: center;
+  align-items: center;
+  /* Opcional: Cursor personalizado
+    cursor: url('path/to/your/default-cursor.png'), auto; */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+  max-width: 120rem; /* 1200px max width */
+  padding: 2rem;
+}
+
+/* --- Clases Utilitarias --- */
+.row,
+.column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem; /* Espacio entre elementos flex */
+}
+
+.column {
+  flex-direction: column;
+}
+
+/* --- Estilos Generales --- */
+h1.title {
+  color: var(--accent-secondary);
+  font-size: 3.2rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+button {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.8rem;
+  border: 0.2rem solid var(--accent-secondary);
+  background-color: var(--accent-primary);
+  color: var(--text-dark);
+  border-radius: var(--border-radius-soft);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  font-weight: 600;
+  /* Opcional: Cursor personalizado para elementos clickables
+    cursor: url('path/to/your/pointer-cursor.png'), pointer; */
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--bg-medium);
+  transform: translateY(-0.2rem);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  background-color: #e0e0e0; /* Gris claro */
+  border-color: #c0c0c0; /* Gris medio */
+  color: #a0a0a0; /* Gris oscuro */
+  cursor: not-allowed;
+}
+
+/* --- Pantallas --- */
+.screen {
+  display: none; /* Ocultas por defecto */
+  width: 100%;
+  min-height: 80vh; /* Asegura altura mínima */
+}
+
+.screen.active {
+  display: flex; /* Muestra la pantalla activa */
+  flex-direction: column; /* Asegura que el contenido interno se apile si no es flex */
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- Pantalla de Inicio --- */
+#start-screen .menu button {
+  min-width: 20rem; /* Ancho mínimo para botones del menú */
+  margin-bottom: 1.5rem; /* Espacio entre botones */
+  text-align: center;
+}
+
+/* --- Pantalla de Juego --- */
+#game-screen {
+  /* Por defecto ya es flex column center por .screen.active y .column */
+}
+
+.game-layout {
+  width: 100%;
+  background-color: var(--bg-medium);
+  border-radius: var(--border-radius-soft);
+  padding: 2rem;
+  /* Mobile First: Por defecto es columna */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.game-section {
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius-medium);
+  padding: 2rem;
+  width: 100%; /* Ocupa todo el ancho en móvil */
+  border: 1px solid var(--accent-primary);
+}
+
+#screen-area {
+  /* Contiene imagen y nombre */
+  align-items: center; /* Centra imagen y nombre */
+}
+
+#character-image-container {
+  width: 100%;
+  max-width: 30rem; /* Máximo ancho de imagen en móvil */
+  height: auto; /* Altura automática */
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#character-image {
+  display: block; /* Evita espacio extra debajo */
+  max-width: 100%;
+  height: auto; /* Mantiene proporción */
+  max-height: 40vh; /* Limita altura para que no sea enorme */
+  border-radius: var(--border-radius-medium);
+  object-fit: contain; /* Asegura que se vea completa sin distorsión */
+}
+
+.character-name-display {
+  background-color: var(--accent-primary);
+  color: var(--text-dark);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--border-radius-medium);
+  font-weight: bold;
+  text-align: center;
+  min-height: 3rem; /* Para que tenga altura aunque no haya nombre */
+  display: inline-block; /* Para que se ajuste al texto */
+}
+
+#dialogue-area {
+  /* Contiene texto y opciones */
+  justify-content: space-between; /* Intenta separar texto y opciones */
+  min-height: 25rem; /* Altura mínima para dar espacio */
+}
+
+#dialogue-text {
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  flex-grow: 1; /* Permite que el texto ocupe espacio */
+}
+
+#options-container {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+}
+
+#options-container button {
+  width: 100%; /* Botones ocupan todo el ancho disponible */
+  margin-bottom: 1rem; /* Espacio entre opciones */
+}
+#options-container button:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Responsive: Tabletas y Escritorio --- */
+@media (min-width: 768px) {
+  body {
+    font-size: 1.8rem; /* Aumenta tamaño base en pantallas más grandes */
+  }
+
+  h1.title {
+    font-size: 4rem;
+  }
+
+  .game-layout {
+    /* Cambia a fila en pantallas más grandes */
+    flex-direction: row;
+    align-items: stretch; /* Estira los hijos para igualar altura */
+    padding: 3rem;
+  }
+
+  .game-section {
+    width: 50%; /* Cada sección ocupa la mitad */
+    padding: 3rem;
+  }
+
+  #screen-area {
+    justify-content: center; /* Centra verticalmente la imagen/nombre */
+  }
+
+  #character-image-container {
+    max-width: 100%; /* Permite que la imagen crezca más */
+    max-height: 50vh; /* Un poco más alta en desktop */
+  }
+
+  #dialogue-area {
+    justify-content: space-between; /* Texto arriba, botones abajo */
+    display: flex;
+    flex-direction: column;
+  }
+
+  #dialogue-text {
+    font-size: 2rem;
+  }
+
+  #options-container button {
+    /* Puedes mantenerlos al 100% o hacerlos más pequeños */
+    /* width: auto;
+         padding: 1.2rem 3rem; */
+  }
+}

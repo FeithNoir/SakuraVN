@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VN Sakura Prototipo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <!-- Pantalla de Inicio -->
+      <section id="start-screen" class="screen active column">
+        <h1 class="title">Mi Novela Visual Sakura</h1>
+        <nav class="menu column">
+          <button id="new-game-btn" class="menu-button">Nuevo Juego</button>
+          <button id="load-game-btn" class="menu-button" disabled>
+            Cargar
+          </button>
+          <button id="options-btn" class="menu-button" disabled>
+            Opciones
+          </button>
+          <button id="about-btn" class="menu-button" disabled>Acerca de</button>
+        </nav>
+      </section>
+
+      <!-- Pantalla de Juego -->
+      <section id="game-screen" class="screen">
+        <div class="game-layout">
+          <!-- Este div cambiará entre row/column -->
+          <div id="screen-area" class="game-section column">
+            <div id="character-image-container">
+              <img id="character-image" src="" alt="Personaje Actual" />
+            </div>
+            <div id="character-name" class="character-name-display">
+              <!-- El nombre del personaje irá aquí -->
+            </div>
+          </div>
+          <div id="dialogue-area" class="game-section column">
+            <p id="dialogue-text">
+              <!-- El texto del diálogo irá aquí -->
+            </p>
+            <div id="options-container" class="column">
+              <!-- Las opciones irán aquí -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
